@@ -13,7 +13,7 @@ export class BoardsService {
   createBoard(title: string, description: string): Board {
     const board: Board = {
       // why we create model to create data on db? we will use prisma...?
-      id: uuid,
+      id: uuid(),
       title,
       description,
       status: BoardStatus.PUBLIC,
