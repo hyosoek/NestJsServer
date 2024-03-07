@@ -6,10 +6,14 @@ import {
   Query,
   Delete,
   Param,
+  Patch,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { BoardsService } from './boards.service';
-import { Board } from './board.model';
-import { CreateBoardDto } from './dto/create-board.dto';
+import { Board, BoardStatus } from './board.model';
+import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
+import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('boards')
 export class BoardsController {
@@ -27,9 +31,10 @@ export class BoardsController {
     return this.boardsService.getBoardByID(id);
   }
 
-  @Post()
+  @Post() // pipetype : built_in_pipe + dto
+  @UsePipes(ValidationPipe)
   createBoard(
-    // Can load all body data with : @Body() body...?
+    //router handler
     @Body() createBoardDto: CreateBoardDto,
   ): Board {
     return this.boardsService.createBoard(createBoardDto);
@@ -39,9 +44,23 @@ export class BoardsController {
   removeBoard(@Param('id') id: string): void {
     this.boardsService.deleteBoard(id);
   }
+
+  @Patch('/:id/status') // pipetype : custom_pipe +  variable
+  updateBoardStatus(
+    @Param('id') id: string,
+    @Body('status', BoardStatusValidationPipe) status: BoardStatus,
+  ) {
+    return this.boardsService.updateBoardStatus(id, status);
+  }
+
+  //   @Patch('/:id/status') // pipetype : custom_pipe +  variable
+  //   @UsePipes(ValidationPipe)
+  //   updateBoardStatus(@Param('id') id: string, @Body() dto: UpdateBoardDto) {
+  //     return this.boardsService.updateBoardStatus(id, dto.status);
+  //   }
 }
 
-//is equals to ...
+//class is equals to ...
 // @Controller('boards')
 // export class BoardsController {
 //   boardsService: BoardsService;
