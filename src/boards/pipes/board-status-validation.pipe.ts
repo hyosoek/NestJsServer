@@ -1,3 +1,4 @@
+//custom pipe
 import {
   ArgumentMetadata,
   BadRequestException,
@@ -6,7 +7,7 @@ import {
 import { BoardStatus } from '../board.model';
 
 export class BoardStatusValidationPipe implements PipeTransform {
-  //PipeTransform is for custom Pipe?
+  //PipeTransform is for custom Pipe
   readonly StatusOptions = [BoardStatus.PRIVATE, BoardStatus.PUBLIC];
   //readonly is like const => For Evince
 
