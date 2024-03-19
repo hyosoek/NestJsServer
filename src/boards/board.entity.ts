@@ -1,8 +1,8 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BoardStatus } from './board.model';
+import { BoardStatus } from './board-status.enum';
 
 @Entity() // it means 'create table'
-export class BoardEntity extends BaseEntity {
+export class Board extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -14,4 +14,13 @@ export class BoardEntity extends BaseEntity {
 
   @Column()
   status: BoardStatus;
+
+  static findAll() {
+    return (
+      this.createQueryBuilder('user')
+        // .where('user.firstName = :firstName', { firstName })
+        // .andWhere('user.lastName = :lastName', { lastName })
+        .getMany()
+    );
+  }
 }
