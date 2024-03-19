@@ -8,37 +8,37 @@ import { Board } from './board.entity';
 
 @Injectable()
 export class BoardsService {
-  constructor(
-    @InjectRepository(Board)
-    private boardRepository: Repository<Board>, // private declare = make property
-  ) {}
+  constructor() {
+    // private boardRepository: Repository<Board>, // private declare = make property // @InjectRepository(Board)
+    const boardRepository = new Board();
+    //don't need to declare, because We don't use Repository
+  }
 
   async getAllBoards(): Promise<Board[]> {
-    const data = await this.boardRepository.findAll();
+    const data = await Board.findAll();
     return data;
   }
 
-  // createBoard(createBoardDto: CreateBoardDto): Board {
-  //   const { title, description } = createBoardDto;
-  //   const board: Board = {
-  //     // why we create model to create data on db? we will use prisma...?
-  //     id: uuid(),
-  //     title,
-  //     description,
-  //     status: BoardStatus.PUBLIC,
-  //   };
-  //   this.boards.push(board);
-  //   return board; //return what we create
-  // }
+  async getBoardByID(id: number): Promise<Board> {
+    const found = await Board.findOne({ where: { id: id } });
+    if (!found) {
+      throw new NotFoundException(`Can't find Board with id ${id}`);
+    }
+    return found;
+  }
 
-  // getBoardByID(id: string): Board {
-  //   const found = this.boards.find((board) => board.id === id);
-  //   if (!found) {
-  //     throw new NotFoundException(`Can't find Board with id ${id}`);
-  //   }
-  //   return found; //Callback
-  //   // this is call by reference
-  // }
+  async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
+    const { title, description } = createBoardDto;
+
+    const board = Board.create({
+      title,
+      description,
+      status: BoardStatus.PUBLIC,
+    });
+    await Board.save(board);
+
+    return board; //return what we create
+  }
 
   // deleteBoard(id: string): void {
   //   if (this.getBoardByID(id))

@@ -16,11 +16,7 @@ export class Board extends BaseEntity {
   status: BoardStatus;
 
   static findAll() {
-    return (
-      this.createQueryBuilder('user')
-        // .where('user.firstName = :firstName', { firstName })
-        // .andWhere('user.lastName = :lastName', { lastName })
-        .getMany()
-    );
+    // usually, doesn't exist built in function is declared
+    return this.createQueryBuilder('user').getMany();
   }
 }
