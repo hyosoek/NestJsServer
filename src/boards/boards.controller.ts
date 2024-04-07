@@ -22,7 +22,7 @@ export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get('/:id') // boards/1
-  getBoardById(@Param('id') id: number): Promise<Board> {
+  getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
     return this.boardsService.getBoardByID(id);
   }
 
@@ -31,6 +31,11 @@ export class BoardsController {
     return this.boardsService.getAllBoards();
   }
 
+  // @Get() // boards?id=1
+  // getBoardById(@Query('id', ParseIntPipe) id: number): Promise<Board> {
+  //   return this.boardsService.getBoardByID(id);
+  // }
+
   @Post() // pipetype : built_in_pipe + dto
   @UsePipes(ValidationPipe)
   createBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
@@ -38,15 +43,15 @@ export class BoardsController {
   }
 
   @Delete('/:id')
-  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<unknown> {
+  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.boardsService.deleteBoardByID(id);
   }
 
-  // @Patch('/:id/status') // pipetype : custom_pipe +  variable
-  // updateBoardStatus(
-  //   @Param('id') id: string,
-  //   @Body('status', BoardStatusValidationPipe) status: BoardStatus,
-  // ) {
-  //   return this.boardsService.updateBoardStatus(id, status);
-  // }
+  @Patch('/:id/status') // pipetype : custom_pipe +  variable
+  updateBoardStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('status', BoardStatusValidationPipe) status: BoardStatus,
+  ) {
+    return this.boardsService.updateBoardStatus(id, status);
+  }
 }

@@ -50,9 +50,12 @@ export class BoardsService {
     // return result;
   }
 
-  // updateBoardStatus(id: string, status: BoardStatus): Board {
-  //   const board = this.getBoardByID(id);
-  //   board.status = status;
-  //   return board;
-  // }
+  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoardByID(id);
+
+    board.status = status;
+    await Board.save(board);
+
+    return board;
+  }
 }
