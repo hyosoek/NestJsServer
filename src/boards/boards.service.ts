@@ -10,8 +10,7 @@ import { Board } from './board.entity';
 export class BoardsService {
   constructor() {
     // private boardRepository: Repository<Board>, // private declare = make property // @InjectRepository(Board)
-    const boardRepository = new Board();
-    //don't need to declare, because We don't use Repository
+    //don't need to declare Repository, because We don't use Repository
   }
 
   async getAllBoards(): Promise<Board[]> {
@@ -40,10 +39,16 @@ export class BoardsService {
     return board; //return what we create
   }
 
-  // deleteBoard(id: string): void {
-  //   if (this.getBoardByID(id))
-  //     this.boards = this.boards.filter((board) => board.id !== id);
-  // }
+  async deleteBoardByID(id: number): Promise<void> {
+    // we can use remove
+    const result = await Board.delete(id); // if single data, delete pk
+    // const board = Board.delete({id:id}); // if object data, it like ''where ??=?? AND ??=??'
+    if (result.affected === 0) {
+      throw new NotFoundException(`Can't find Board with id : ${id} `);
+    }
+    console.log(result);
+    // return result;
+  }
 
   // updateBoardStatus(id: string, status: BoardStatus): Board {
   //   const board = this.getBoardByID(id);
