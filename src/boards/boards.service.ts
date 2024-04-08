@@ -14,8 +14,7 @@ export class BoardsService {
   }
 
   async getAllBoards(): Promise<Board[]> {
-    const data = await Board.findAll();
-    return data;
+    return await Board.find();
   }
 
   async getBoardByID(id: number): Promise<Board> {
