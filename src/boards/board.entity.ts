@@ -21,7 +21,7 @@ export class Board extends BaseEntity {
   @Column()
   status: BoardStatus;
 
-  static findAll() {
+  static async findAll() {
     // usually, doesn't exist built in function is declared
     return this.createQueryBuilder('user').getMany();
   }
