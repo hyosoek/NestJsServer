@@ -14,9 +14,15 @@ import { Account } from './user.entity';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  // @Post()
+  // @UsePipes(ValidationPipe)
+  // signUp(@Body() authCredentialDto: AuthCredentialDto): Promise<void> {
+  //   return this.authService.signUp(authCredentialDto);
+  // }
   @Post()
-  @UsePipes(ValidationPipe)
-  signUp(@Body() authCredentialDto: AuthCredentialDto): Promise<void> {
+  signUp(
+    @Body(ValidationPipe) authCredentialDto: AuthCredentialDto,
+  ): Promise<void> {
     return this.authService.signUp(authCredentialDto);
   }
 
