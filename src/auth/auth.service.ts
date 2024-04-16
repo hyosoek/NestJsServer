@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { Account } from './user.entity';
+import { typeORMConfig } from 'src/configs/typeorm.config';
 
 @Injectable()
 export class AuthService {
