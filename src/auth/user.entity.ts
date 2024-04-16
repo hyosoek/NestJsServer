@@ -10,6 +10,7 @@ import {
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 
 @Entity()
 @Unique(['username'])
@@ -29,9 +30,10 @@ export class Account extends BaseEntity {
   // and... It is just connect for DB(to transfer command)
   static async createUser(authCredentialDto: AuthCredentialDto): Promise<void> {
     const { username, password } = authCredentialDto;
-    const user = this.create({ username, password });
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = this.create({ username: username, password: hashedPassword });
     // Create method don't connect to DB. just make code object.
-
     try {
       await this.save(user);
     } catch (error) {
