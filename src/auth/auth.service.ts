@@ -1,23 +1,24 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { Account } from './user.entity';
 import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor() {}
+  constructor(private jwtService: JwtService) {}
 
-  async signIn(authCredentialDto: AuthCredentialDto): Promise<string> {
+  async signIn(
+    authCredentialDto: AuthCredentialDto,
+  ): Promise<{ accessToken: string }> {
     const { username, password } = authCredentialDto;
     const user = await Account.findOne({ where: { username: username } });
 
     // if data exist and password right
     if (user && (await bcrypt.compare(password, user.password))) {
-      return 'logIn success';
+      const payload = { username }; // it can be read only. don't insert private data
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken };
     } else {
       throw new UnauthorizedException('logIn failed');
     }
