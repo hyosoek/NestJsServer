@@ -1,8 +1,12 @@
-import { IsString, Length, Matches } from 'class-validator';
+import { IsString, Length, Matches, Validate } from 'class-validator';
+import { CustomValidator } from '../customValidator.decorator';
 
 export class AuthCredentialDto {
-  @IsString() // handler level
-  @Length(4, 20)
+  // @IsString() // handler level
+  // @Length(4, 20)
+  // username: string;
+
+  @Validate(CustomValidator)
   username: string;
 
   @IsString()
