@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -11,6 +12,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
+import { Board } from 'src/boards/board.entity';
 
 @Entity()
 @Unique(['username'])
@@ -23,6 +25,9 @@ export class Account extends BaseEntity {
 
   @Column()
   password: string;
+
+  @OneToMany((type) => Board, (board) => board.account, { eager: true })
+  boards: Board[];
 
   // why use static?
   // beacuse when every connection occur, we don't want to make each connection object.
