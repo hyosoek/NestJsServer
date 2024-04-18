@@ -13,7 +13,8 @@ export class CustomValidator implements ValidatorConstraintInterface {
   }
 
   private customValidator(data: string): boolean {
-    if (data.length >= 4 && data.length <= 20) return true;
+    if (data.length >= 4 && data.length <= 20 && typeof data == 'string')
+      return true;
     else return false;
   }
 
