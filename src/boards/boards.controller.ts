@@ -26,13 +26,18 @@ import { Account } from 'src/auth/account.entity';
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
-  @Get('/:id') // boards/1
-  getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
-    return this.boardsService.getBoardByID(id);
+  @Get('/owned') // boards/1
+  getBoardById(@GetUser() account: Account): Promise<Board[]> {
+    return this.boardsService.getBoardByAccount(account);
   }
 
+  // @Get('/:id') // boards/1
+  // getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+  //   return this.boardsService.getBoardByID(id);
+  // }
+
   @Get()
-  getAllBoard(): Promise<Board[]> {
+  getAllBoards(): Promise<Board[]> {
     return this.boardsService.getAllBoards();
   }
 
@@ -59,7 +64,8 @@ export class BoardsController {
   updateBoardStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', BoardStatusValidationPipe) status: BoardStatus,
-  ) {
-    return this.boardsService.updateBoardStatus(id, status);
+    @GetUser() account: Account,
+  ): Promise<Board[]> {
+    return this.boardsService.updateBoardStatus(account, status);
   }
 }

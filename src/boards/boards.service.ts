@@ -10,7 +10,7 @@ import { Account } from 'src/auth/account.entity';
 @Injectable()
 export class BoardsService {
   constructor() {
-    // private boardRepository: Repository<Board>, // private declare = make property // @InjectRepository(Board)
+    // private boardRepository: Repository<Board>, // private declare = make property // @InjectRep0?: { where: { account: Account; }; }p0: { where: { account: Account; }; }pository(Board)
     //don't need to declare Repository, because We don't use Repository
   }
 
@@ -18,10 +18,12 @@ export class BoardsService {
     return await Board.find();
   }
 
-  async getBoardByID(id: number): Promise<Board> {
-    const found = await Board.findOne({ where: { id: id } });
+  async getBoardByAccount(account: Account): Promise<Board[]> {
+    const found = await Board.find({ where: { account: account } });
     if (!found) {
-      throw new NotFoundException(`Can't find Board with id ${id}`);
+      throw new NotFoundException(
+        `Can't find Board with username :  ${account.username}`,
+      );
     }
     return found;
   }
@@ -54,10 +56,15 @@ export class BoardsService {
     // return result;
   }
 
-  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
-    const board = await this.getBoardByID(id);
+  async updateBoardStatus(
+    account: Account,
+    status: BoardStatus,
+  ): Promise<Board[]> {
+    const board = await this.getBoardByAccount(account);
 
-    board.status = status;
+    board.forEach((status) => {
+      status = status;
+    });
     await Board.save(board);
 
     return board;
