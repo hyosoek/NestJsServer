@@ -21,7 +21,6 @@ export class BoardsService {
   async getBoardByAccount(account: Account): Promise<Board[]> {
     // const found = await Board.find({ where: { account: account } });
     // if I can use built-in method, it is better
-
     const query = Board.createQueryBuilder('board');
     query.where('board.accountId = :accountId', { accountId: account.id });
 
@@ -52,14 +51,13 @@ export class BoardsService {
     return board; //return what we create
   }
 
-  async deleteBoardByID(id: number): Promise<void> {
+  async deleteBoardByID(id: number, account: Account): Promise<void> {
     // we can use remove
-    const result = await Board.delete(id); // if single data, delete pk
+    const result = await Board.delete({ id, account }); // if single data, delete pk
     // const board = Board.delete({id:id}); // if object data, it like ''where ??=?? AND ??=??'
     if (result.affected === 0) {
       throw new NotFoundException(`Can't find Board with id : ${id} `);
     }
-    console.log(result);
     // return result;
   }
 

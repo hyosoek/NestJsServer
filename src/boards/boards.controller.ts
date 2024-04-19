@@ -56,8 +56,11 @@ export class BoardsController {
   }
 
   @Delete('/:id')
-  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.boardsService.deleteBoardByID(id);
+  deleteBoard(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() account: Account,
+  ): Promise<void> {
+    return this.boardsService.deleteBoardByID(id, account);
   }
 
   @Patch('/:id/status') // pipetype : custom_pipe +  variable
