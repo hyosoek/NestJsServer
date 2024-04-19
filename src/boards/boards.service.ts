@@ -19,13 +19,20 @@ export class BoardsService {
   }
 
   async getBoardByAccount(account: Account): Promise<Board[]> {
-    const found = await Board.find({ where: { account: account } });
-    if (!found) {
+    // const found = await Board.find({ where: { account: account } });
+    // if I can use built-in method, it is better
+
+    const query = Board.createQueryBuilder('board');
+    query.where('board.accountId = :accountId', { accountId: account.id });
+
+    const boards = await query.getMany();
+
+    if (!boards) {
       throw new NotFoundException(
         `Can't find Board with username :  ${account.username}`,
       );
     }
-    return found;
+    return boards;
   }
 
   async createBoard(
